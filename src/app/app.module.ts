@@ -1,16 +1,26 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
-import { AppComponent } from './app.component';
+import { HeaderComponent } from './header/header.component';
+import { ResultsComponent } from './results/results.component';
+
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { MyFilterPipe } from './shared/MyFilterPipe';
+
 
 @NgModule({
   declarations: [
-    AppComponent
+    HeaderComponent,
+    ResultsComponent,
+    MyFilterPipe
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    HttpClientModule,
+    NgxSpinnerModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [HeaderComponent, ResultsComponent]
 })
 export class AppModule { }

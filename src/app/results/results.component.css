@@ -1,0 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Kodchasan');
+
+#results {
+    margin: 3%;
+}
+.avatar{
+    width:100%;
+    height: auto;
+    border-radius: 50%;
+    align-content: center;
+
+}
+
+.resultText{
+    font-family: 'Kodchasan', sans-serif;
+}
+
+#search {
+  margin-left:35%;
+}
