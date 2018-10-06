@@ -6,7 +6,7 @@
 </div>
 
 <div class="row" id="results">
-  <div *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" >
+  <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" (click)="ListUserInformation(user)">
     <div class="col s3" *ngIf="i<8">
       <div class="input-field col s4">
         <img src="{{user.avatar_url}}" alt="avatar" class="avatar">
@@ -16,6 +16,24 @@
       </div>
     </div>
   </div>
+</div>
+
+<div class="row" id='userInfo'>
+    <div class="col s4">
+      <div class="card-image">
+        <img src="images/sample-1.jpg">
+      </div>
+    </div>
+    <div class="col s8">
+      <div class="card">
+        <div class="card-content">
+            {{oUser.email}}
+        </div>
+        <div class="card-action">
+          <a href="#">This is a link</a>
+        </div>
+      </div>
+    </div>
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">

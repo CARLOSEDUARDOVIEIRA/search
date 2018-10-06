@@ -13,6 +13,7 @@ export class ResultsComponent implements OnInit {
   aUsersGitHub = [];
   aResultUsers = [];
   sQuery = '';
+  oUser = [];
 
   constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
 
@@ -21,7 +22,6 @@ export class ResultsComponent implements OnInit {
   }
 
   eventHandler(event: any) {
-
     if ( event.code.indexOf('Key') === -1 ) {
       return;
     }
@@ -60,11 +60,24 @@ export class ResultsComponent implements OnInit {
   RequestUsers = ( sNameUser: string ) => {
     this.rootService.GetUsers( sNameUser, ( aUsersGitHub ) => {
       if ( aUsersGitHub ) {
-        localStorage.setItem( 'aUsers', JSON.stringify( aUsersGitHub.items ) );
+        this.aUsersGitHub = aUsersGitHub.items;
+        localStorage.setItem( 'aUsers', JSON.stringify( this.aUsersGitHub ) );
         this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
+        this.spinner.hide();
+      } else {
         this.spinner.hide();
       }
     });
   }
 
+  ListUserInformation = ( aUser ) => {
+    this.spinner.show();
+    this.rootService.GetUserInfo( aUser.url, ( aUserInfo ) => {
+      if ( aUserInfo ) {
+        this.oUser = aUserInfo;
+        console.log(this.oUser);
+        this.spinner.hide();
+      }
+    });
+  }
 }
