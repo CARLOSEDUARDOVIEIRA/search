@@ -16,11 +16,12 @@
 }
 
 #search {
-  margin-left:35%;
+  margin-left:20%;
+  margin-right:20%;
 }
 
 #line{
-    cursor:pointer;
+  cursor:pointer;
 }
 
 .img-info{
@@ -32,4 +33,14 @@
 #userInfo{
   margin-left: 20%;
   margin-right: 20%;
+}
+
+.alert-no-found {
+  background-color: #fcf8e3;
+  border-radius: 5%;
+  text-align: center;
+  color: #8a6d3b;
+  margin-left: 20%;
+  margin-right: 20%;
+  font-size: 16px;
 }

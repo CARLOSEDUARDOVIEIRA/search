@@ -1,10 +1,14 @@
 <div class="row" id='search'>
-  <div class="input-field col s6">
+  <div class="input-field col s12">
     <input [(ngModel)]="searchText" type="text" autocomplete='off' (keyup)="eventHandler($event)" autofocus placeholder="Digite o nome do usuário à pesquisar">
   </div>
 </div>
-
-<div class="row" id="results" *ngIf="!mostrarUserInfo">
+<div class='row' *ngIf="showWarningNoFound">
+  <div class="alert-no-found col-md-12">
+    <strong>Oops!</strong> Nenhum registro encontrado com este nome
+  </div>
+</div>
+<div class="row" id="results" *ngIf="!showUserInfo">
   <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" (click)="ListUserInformation(user)">
     <div class="col s3" *ngIf="i<8">
       <div class="input-field col s4">
@@ -18,31 +22,29 @@
 </div>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
-    <p style="font-size: 20px; color: white">Loading...</p>
+  <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
 
-<div class="row" id='userInfo' *ngIf="mostrarUserInfo">
-    <div class="col s5">
-      <div class="card-image">
-        <img src="{{oUser['avatar_url']}}" class='img-info'>
-      </div>
+<div class="row" id='userInfo' *ngIf="showUserInfo">
+  <div class="col s5">
+    <div class="card-image">
+      <img src="{{oUser['avatar_url']}}" class='img-info'>
     </div>
-    <div class="col s6">
-      <div class="card">
-        <div class="card-content">
-          <div class='row col s12'>
-              <span class="card-title activator grey-text text-darken-4">{{oUser["name"]}}</span>
-          </div>
-          <p *ngIf="oUser['email']"> Email: {{oUser["email"]}} </p>
-          <p *ngIf="!oUser['email']"> Email: Private </p>
-          <p> Dt. Cadastro: {{oUser["created_at"] | date: 'dd/MM/yyyy HH:mm'}}</p>
-          <p> Seguidores:  {{oUser["following"]}}</p>
-          <p> Seguindo:  {{oUser["followers"]}}</p>
+  </div>
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <div class='row col s12'>
+          <span class="card-title activator grey-text text-darken-4">{{oUser["name"]}}</span>
+        </div>
+        <p *ngIf="oUser['email']"> Email: {{oUser["email"]}} </p>
+        <p *ngIf="!oUser['email']"> Email: Private </p>
+        <p> Dt. Cadastro: {{oUser["created_at"] | date: 'dd/MM/yyyy HH:mm'}}</p>
+        <p> Seguidores: {{oUser["following"]}}</p>
+        <p> Seguindo: {{oUser["followers"]}}</p>
         <div class="card-action">
-          <button class="btn waves-effect waves-light" (click)="backSearch()" > Voltar </button>
+          <button class="btn waves-effect waves-light" (click)="backSearch()"> Voltar </button>
         </div>
       </div>
     </div>
-</div>
-
-
+  </div>

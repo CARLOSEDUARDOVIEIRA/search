@@ -16,7 +16,8 @@ export class ResultsComponent implements OnInit {
   aResultUsers = [];
   sQuery = '';
   oUser = [];
-  mostrarUserInfo = false;
+  showUserInfo = false;
+  showWarningNoFound = false;
 
   constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
 
@@ -24,10 +25,10 @@ export class ResultsComponent implements OnInit {
 
 
   eventHandler(event: any) {
+    this.showWarningNoFound = false;
     if ( event.code.indexOf('Key') === -1 ) {
       return;
     }
-
     let value = event.target.value;
 
     if ( value !== '' ) {
@@ -36,15 +37,15 @@ export class ResultsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.showWarningNoFound = false;
     this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
     this.filterString.pipe(
       debounceTime(300)
     ).subscribe( searchingUser => {
-      console.log( searchingUser );
       if ( this.aResultUsers ) {
         this.FindUserByName( { 'login' : searchingUser } );
       } else {
-        this.RequestUsers( this.sQuery );
+        this.RequestUsers( searchingUser );
       }
     });
   }
@@ -69,12 +70,13 @@ export class ResultsComponent implements OnInit {
   RequestUsers = ( sNameUser: string ) => {
     this.spinner.show();
     this.rootService.GetUsers( sNameUser, ( aUsersGitHub ) => {
-      if ( aUsersGitHub ) {
+      if ( aUsersGitHub && aUsersGitHub.items.length > 0 ) {
         this.aUsersGitHub = aUsersGitHub.items;
         localStorage.setItem( 'aUsers', JSON.stringify( this.aUsersGitHub ) );
         this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
         this.spinner.hide();
       } else {
+        this.showWarningNoFound = true;
         this.spinner.hide();
       }
     });
@@ -85,13 +87,15 @@ export class ResultsComponent implements OnInit {
     this.rootService.GetUserInfo( aUser.url, ( aUserInfo ) => {
       if ( aUserInfo ) {
         this.oUser = aUserInfo;
-        this.mostrarUserInfo = true;
+        this.showUserInfo = true;
         this.spinner.hide();
+      } else {
+        this.showWarningNoFound = true;
       }
     });
   }
 
   backSearch = () => {
-    this.mostrarUserInfo = false;
+    this.showUserInfo = false;
   }
 }
