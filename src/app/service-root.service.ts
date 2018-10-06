@@ -6,15 +6,12 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ServiceRootService {
 
-  data: any;
-
   constructor(private http: HttpClient) {}
 
   GetUsers = ( sNameUser, callback ) => {
     // 'https://api.github.com/search/users?q=' + sNameUser + '+in:fullname'
     this.http.get( 'https://api.github.com/search/users?q=' + sNameUser ).subscribe( resp => {
-      this.data = resp;
-      callback( this.data );
+      callback( resp );
     }, err => {
       callback(err.error.msg);
     });
