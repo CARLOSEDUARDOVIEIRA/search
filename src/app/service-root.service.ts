@@ -22,8 +22,7 @@ export class ServiceRootService {
 
   GetUserInfo = ( sUrlUser, callback )  => {
     this.http.get( sUrlUser ).subscribe( resp => {
-      this.data = resp;
-      callback( this.data );
+      callback( resp );
     }, err => {
       callback(err.error.msg);
     });

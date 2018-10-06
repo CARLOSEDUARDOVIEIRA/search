@@ -1,11 +1,10 @@
 <div class="row" id='search'>
   <div class="input-field col s6">
-    <input [(ngModel)]="searchText" type="text" class="validate" autocomplete='off' (keyup)="eventHandler($event)" autofocus>
-    <label for="pesquisa">Digite o nome do usuário à pesquisar</label>
+    <input [(ngModel)]="searchText" type="text" autocomplete='off' (keyup)="eventHandler($event)" autofocus placeholder="Digite o nome do usuário à pesquisar">
   </div>
 </div>
 
-<div class="row" id="results">
+<div class="row" id="results" *ngIf="!mostrarUserInfo">
   <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" (click)="ListUserInformation(user)">
     <div class="col s3" *ngIf="i<8">
       <div class="input-field col s4">
@@ -18,19 +17,25 @@
   </div>
 </div>
 
-<div class="row" id='userInfo'>
-    <div class="col s4">
+<div class="row" id='userInfo' *ngIf="mostrarUserInfo">
+    <div class="col s5">
       <div class="card-image">
-        <img src="images/sample-1.jpg">
+        <img src="{{oUser['avatar_url']}}" class='img-info'>
       </div>
     </div>
-    <div class="col s8">
+    <div class="col s6">
       <div class="card">
         <div class="card-content">
-            {{oUser.email}}
-        </div>
+          <div class='row col s12'>
+              <span class="card-title activator grey-text text-darken-4">{{oUser["name"]}}</span>
+          </div>
+          <p *ngIf="oUser['email']"> Email: {{oUser["email"]}} </p>
+          <p *ngIf="!oUser['email']"> Email: Private </p>
+          <p> Dt. Cadastro: {{oUser["created_at"] | date: 'dd/MM/yyyy HH:mm'}}</p>
+          <p> Seguidores:  {{oUser["following"]}}</p>
+          <p> Seguindo:  {{oUser["followers"]}}</p>
         <div class="card-action">
-          <a href="#">This is a link</a>
+          <button class="btn waves-effect waves-light" (click)="backSearch()" > Voltar </button>
         </div>
       </div>
     </div>

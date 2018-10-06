@@ -14,6 +14,7 @@ export class ResultsComponent implements OnInit {
   aResultUsers = [];
   sQuery = '';
   oUser = [];
+  mostrarUserInfo = false;
 
   constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
 
@@ -75,9 +76,13 @@ export class ResultsComponent implements OnInit {
     this.rootService.GetUserInfo( aUser.url, ( aUserInfo ) => {
       if ( aUserInfo ) {
         this.oUser = aUserInfo;
-        console.log(this.oUser);
+        this.mostrarUserInfo = true;
         this.spinner.hide();
       }
     });
+  }
+
+  backSearch = () => {
+    this.mostrarUserInfo = false;
   }
 }
