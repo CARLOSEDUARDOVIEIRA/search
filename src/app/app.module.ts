@@ -7,18 +7,20 @@ import { ResultsComponent } from './results/results.component';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { MyFilterPipe } from './shared/MyFilterPipe';
-
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     ResultsComponent,
     MyFilterPipe
+
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [HeaderComponent, ResultsComponent]

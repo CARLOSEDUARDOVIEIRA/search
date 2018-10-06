@@ -11,46 +11,57 @@ import { NgxSpinnerService } from 'ngx-spinner';
 export class ResultsComponent implements OnInit {
 
   aUsersGitHub = [];
+  aResultUsers = [];
   sQuery = '';
 
   constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
 
   ngOnInit() {
+    this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
   }
 
   eventHandler(event: any) {
+
     if ( event.code.indexOf('Key') === -1 ) {
       return;
     }
 
     if ( event.target.value !== '' ) {
       this.sQuery += event.target.value;
-      if ( this.sQuery.length > 5 ) {
-        this.FindUserByName( this.sQuery );
+      if ( this.sQuery.length > 4 ) {
+        this.spinner.show();
+        if ( this.aResultUsers ) {
+          this.FindUserByName( { 'login' : this.sQuery } );
+        } else {
+          this.RequestUsers( this.sQuery );
+        }
       }
       this.sQuery = '';
-
     }
 
   }
 
-  FindUserByName = ( sNameUser: string ) => {
-    this.spinner.show();
+  FindUserByName = ( filter ) => {
+    const filterKeys = ['login'];
+    let aOccurrence = this.aResultUsers.filter(item => {
+      return filterKeys.some((keyName) => {
+        return new RegExp(filter[keyName], 'gi').test(item[keyName]) || filter[keyName] == "";
+      });
+    });
 
-    if ( this.aUsersGitHub.length > 0) {
-      console.log( this.aUsersGitHub );
-      this.spinner.hide();
+    if ( aOccurrence.length === 0 ) {
+      this.RequestUsers(filter.login);
     } else {
-      this.RequestUsers(sNameUser);
-      console.log(this.aUsersGitHub);
+      this.spinner.hide();
     }
 
   }
 
   RequestUsers = ( sNameUser: string ) => {
     this.rootService.GetUsers( sNameUser, ( aUsersGitHub ) => {
-      if ( aUsersGitHub !== 'void 0' ) {
-        this.aUsersGitHub.push( aUsersGitHub.items );
+      if ( aUsersGitHub ) {
+        localStorage.setItem( 'aUsers', JSON.stringify( aUsersGitHub.items ) );
+        this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
         this.spinner.hide();
       }
     });

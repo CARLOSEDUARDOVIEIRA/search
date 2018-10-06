@@ -1,18 +1,19 @@
 <div class="row" id='search'>
   <div class="input-field col s6">
-    <input #query id='query' type="text" class="validate" autocomplete='off' (keyup)="eventHandler($event)" autofocus>
+    <input [(ngModel)]="searchText" type="text" class="validate" autocomplete='off' (keyup)="eventHandler($event)" autofocus>
     <label for="pesquisa">Digite o nome do usuário à pesquisar</label>
   </div>
 </div>
 
 <div class="row" id="results">
-  <!-- <div class="col s3" *ngFor="let user of aUsersGitHub[0] | searchfilter: 'login' : query.value"> -->
-  <div class="col s3" *ngFor="let user of aUsersGitHub[0] | searchfilter: 'login' : query.value">
-    <div class="input-field col s4">
-      <img src="{{user.avatar_url}}" alt="avatar" class="avatar">
-    </div>
-    <div class="input-field col s8">
-      <p class="resultText">{{user.login}}</p>
+  <div *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" >
+    <div class="col s3" *ngIf="i<8">
+      <div class="input-field col s4">
+        <img src="{{user.avatar_url}}" alt="avatar" class="avatar">
+      </div>
+      <div class="input-field col s8">
+        <p class="resultText">{{user.login}}</p>
+      </div>
     </div>
   </div>
 </div>
