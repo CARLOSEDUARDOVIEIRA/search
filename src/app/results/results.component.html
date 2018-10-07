@@ -43,6 +43,7 @@
         <p> Seguidores: {{oUser["following"]}}</p>
         <p> Seguindo: {{oUser["followers"]}}</p>
         <div class="card-action">
+            <a href="{{oUser['html_url']}}" target="_blank">Visitar Perfil</a>
           <button class="btn waves-effect waves-light" (click)="backSearch()"> Voltar </button>
         </div>
       </div>
