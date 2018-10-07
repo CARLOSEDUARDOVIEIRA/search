@@ -19,6 +19,9 @@
   margin-left:20%;
   margin-right:20%;
 }
+#search input {
+  text-align: center;
+}
 
 #line{
   cursor:pointer;

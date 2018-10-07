@@ -1,6 +1,6 @@
 <div class="row" id='search'>
   <div class="input-field col s12">
-    <input [(ngModel)]="searchText" type="text" autocomplete='off' (keyup)="eventHandler($event)" autofocus placeholder="Digite o nome do usuário à pesquisar">
+    <input #searchText type="text" autocomplete='off' (keyup)="eventHandler($event)" autofocus placeholder="username-github-sem-espacos">
   </div>
 </div>
 <div class='row' *ngIf="showWarningNoFound">
@@ -9,7 +9,7 @@
   </div>
 </div>
 <div class="row" id="results" *ngIf="!showUserInfo">
-  <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText}; let i=index;" (click)="ListUserInformation(user)">
+  <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText.value}; let i=index;" (click)="ListUserInformation(user)">
     <div class="col s3" *ngIf="i<8">
       <div class="input-field col s4">
         <img src="{{user.avatar_url}}" alt="avatar" class="avatar">

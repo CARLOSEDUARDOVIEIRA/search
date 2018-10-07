@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ServiceRootService } from '../service-root.service';
 
 import { NgxSpinnerService } from 'ngx-spinner';
-import { debounceTime, switchMap, map, catchError } from 'rxjs/operators';
-import { Subject, of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-results',
@@ -12,12 +12,12 @@ import { Subject, of } from 'rxjs';
 })
 export class ResultsComponent implements OnInit {
 
-  aUsersGitHub = [];
   aResultUsers = [];
   sQuery = '';
   oUser = [];
   showUserInfo = false;
   showWarningNoFound = false;
+  searchText = '';
 
   constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
 
@@ -38,7 +38,6 @@ export class ResultsComponent implements OnInit {
 
   ngOnInit() {
     this.showWarningNoFound = false;
-    this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
     this.filterString.pipe(
       debounceTime(300)
     ).subscribe( searchingUser => {
@@ -71,9 +70,7 @@ export class ResultsComponent implements OnInit {
     this.spinner.show();
     this.rootService.GetUsers( sNameUser, ( aUsersGitHub ) => {
       if ( aUsersGitHub && aUsersGitHub.items.length > 0 ) {
-        this.aUsersGitHub = aUsersGitHub.items;
-        localStorage.setItem( 'aUsers', JSON.stringify( this.aUsersGitHub ) );
-        this.aResultUsers = JSON.parse( localStorage.getItem( 'aUsers' ) );
+        this.aResultUsers = aUsersGitHub.items;
         this.spinner.hide();
       } else {
         this.showWarningNoFound = true;
