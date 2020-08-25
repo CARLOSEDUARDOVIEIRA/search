@@ -1,0 +1,24 @@
+.logo {
+  margin-bottom: -5%;
+}
+
+.logo img {
+  width: 200px;
+  height: auto;
+}
+
+.title__begin {
+  font-weight: lighter;
+  font-family: 'Poiret One', cursive;
+}
+
+.title__end {
+  font-weight: bold;
+  font-family: 'Paytone One', sans-serif;
+}
+
+.subtitle {
+  font-family: 'Poiret One', cursive;
+  font-size: 2rem;
+  font-weight: lighter;
+}
