@@ -4,8 +4,8 @@ import { debounceTime } from 'rxjs/operators';
 import { Subject, Subscription } from 'rxjs';
 import { User } from '../core/models/user.model';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { ServiceRootService } from '../service-root.service';
 import { ToastrService } from 'ngx-toastr';
+import { UserService } from './../user/user.service';
 
 @Component({
   selector: 'app-results',
@@ -22,9 +22,9 @@ export class ResultsComponent implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor (
-    private rootService: ServiceRootService,
-    private spinner: NgxSpinnerService,
-    private toastrService: ToastrService,
+    private spinner:        NgxSpinnerService,
+    private toastrService:  ToastrService,
+    private userService:    UserService,
   ) {}
 
   ngOnInit() {
@@ -79,7 +79,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.spinner.show();
     this.isLoading = true;
     this.subscriptions.add(
-      this.rootService.fetchUser( userProfileLink )
+      this.userService.fetchUser( userProfileLink )
       .subscribe( ( user: User ) => {
         this.spinner.hide();
         this.isLoading = false;
@@ -96,7 +96,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
     this.spinner.show();
     this.isLoading = true;
     this.subscriptions.add(
-      this.rootService.fetchAllUsers( name )
+      this.userService.fetchAllUsers( name )
       .subscribe( ( users ) => {
         this.spinner.hide();
         this.isLoading = false;

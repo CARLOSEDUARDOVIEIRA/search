@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
+
 import { HttpClient } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { User } from '../core/models/user.model';
 import { timeout, catchError, map } from 'rxjs/operators';
-import { throwError, Observable } from 'rxjs';
-import { User } from './core/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceRootService {
+export class UserService {
 
   private timeout = 15000;
 
