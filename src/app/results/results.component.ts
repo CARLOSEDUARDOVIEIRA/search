@@ -1,98 +1,111 @@
-import { Component, OnInit } from '@angular/core';
-import { ServiceRootService } from '../service-root.service';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { NgxSpinnerService } from 'ngx-spinner';
 import { debounceTime } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
+import { User } from '../core/models/user.model';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ServiceRootService } from '../service-root.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-results',
   templateUrl: './results.component.html',
   styleUrls: ['./results.component.css']
 })
-export class ResultsComponent implements OnInit {
+export class ResultsComponent implements OnInit, OnDestroy {
 
-  aResultUsers = [];
-  sQuery = '';
-  oUser = [];
-  showUserInfo = false;
-  showWarningNoFound = false;
-  searchText = '';
+  public userList:      User[] = [];
+  public user:          User = new User();
+  public isLoading:     boolean;
 
-  constructor(private rootService: ServiceRootService, private spinner: NgxSpinnerService) {}
+  private filterString:   Subject<string> = new Subject<string>();
+  private subscriptions = new Subscription();
 
-  private filterString: Subject<string> = new Subject<string>();
+  constructor (
+    private rootService: ServiceRootService,
+    private spinner: NgxSpinnerService,
+    private toastrService: ToastrService,
+  ) {}
 
+  ngOnInit() {
+    this.filterString.pipe(
+      debounceTime(300)
+      ).subscribe( searchingUser => {
+        if ( this.userList.length ) {
+          this.FindUserByName( { 'login' : searchingUser } );
+        } else {
+          this.getUsers( searchingUser );
+        }
+    });
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
+  }
 
   eventHandler(event: any) {
-    this.showWarningNoFound = false;
     if ( event.code.indexOf('Key') === -1 ) {
       return;
     }
-    let value = event.target.value;
+    const value = event.target.value;
 
     if ( value !== '' ) {
       this.filterString.next(value);
     }
   }
 
-  ngOnInit() {
-    this.showWarningNoFound = false;
-    this.filterString.pipe(
-      debounceTime(300)
-    ).subscribe( searchingUser => {
-      if ( this.aResultUsers ) {
-        this.FindUserByName( { 'login' : searchingUser } );
-      } else {
-        this.RequestUsers( searchingUser );
-      }
-    });
-  }
-
   FindUserByName = ( filter ) => {
     this.spinner.show();
     const filterKeys = ['login'];
-    let aOccurrence = this.aResultUsers.filter(item => {
+    const aOccurrence = this.userList.filter(item => {
       return filterKeys.some((keyName) => {
-        return new RegExp(filter[keyName], 'gi').test(item[keyName]) || filter[keyName] == "";
+        return new RegExp(filter[keyName], 'gi').test(item[keyName]) || filter[keyName] === '';
       });
     });
 
     if ( aOccurrence.length === 0 ) {
-      this.RequestUsers(filter.login);
+      this.getUsers(filter.login);
     } else {
       this.spinner.hide();
     }
 
   }
 
-  RequestUsers = ( sNameUser: string ) => {
-    this.spinner.show();
-    this.rootService.GetUsers( sNameUser, ( aUsersGitHub ) => {
-      if ( aUsersGitHub && aUsersGitHub.items.length > 0 ) {
-        this.aResultUsers = aUsersGitHub.items;
-        this.spinner.hide();
-      } else {
-        this.showWarningNoFound = true;
-        this.spinner.hide();
-      }
-    });
+  public removeUser = () => {
+    this.user = new User();
   }
 
-  ListUserInformation = ( aUser ) => {
+  public getUserDetail = ( userProfileLink: string ) => {
     this.spinner.show();
-    this.rootService.GetUserInfo( aUser.url, ( aUserInfo ) => {
-      if ( aUserInfo ) {
-        this.oUser = aUserInfo;
-        this.showUserInfo = true;
+    this.isLoading = true;
+    this.subscriptions.add(
+      this.rootService.fetchUser( userProfileLink )
+      .subscribe( ( user: User ) => {
         this.spinner.hide();
-      } else {
-        this.showWarningNoFound = true;
-      }
-    });
+        this.isLoading = false;
+        this.user = user;
+      }, error => {
+        this.spinner.hide();
+        this.isLoading = false;
+        this.toastrService.error(error, 'U.ups!');
+      })
+    );
   }
 
-  backSearch = () => {
-    this.showUserInfo = false;
+  private getUsers = ( name: string ) => {
+    this.spinner.show();
+    this.isLoading = true;
+    this.subscriptions.add(
+      this.rootService.fetchAllUsers( name )
+      .subscribe( ( users ) => {
+        this.spinner.hide();
+        this.isLoading = false;
+        this.userList = users;
+      }, error => {
+        this.spinner.hide();
+        this.isLoading = false;
+        this.toastrService.error(error, 'U.ups!');
+      }),
+    );
   }
 }

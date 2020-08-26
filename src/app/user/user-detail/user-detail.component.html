@@ -1,0 +1,29 @@
+<div class="row userInfo">
+  <div class="col s5">
+    <div class="card-image">
+      <img [src]="user.thumbUrl" class='img-info'>
+    </div>
+  </div>
+
+  <div class="col s6">
+    <div class="card">
+      <div class="card-content">
+        <div class='row'>
+          <div class="col s12">
+            <span class="card-title activator grey-text text-darken-4">{{user.name}}</span>
+          </div>
+        </div>
+
+        <p> Email: {{ user.email }} </p>
+        <p> Dt. Cadastro: {{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
+        <p> Seguidores: {{ user.following }}</p>
+        <p> Seguindo: {{ user.followers }}</p>
+
+        <div class="card-action">
+          <a (click)="toUserList.next(true)" class="cursor-pointer"> Voltar </a>
+          <button class="btn waves-effect waves-light" (click)="toUserProfile()"> Visitar Perfil </button>
+        </div>
+
+      </div>
+  </div>
+</div>

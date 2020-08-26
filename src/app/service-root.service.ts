@@ -1,27 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { timeout, catchError, map } from 'rxjs/operators';
+import { throwError, Observable } from 'rxjs';
+import { User } from './core/models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceRootService {
 
-  constructor(private http: HttpClient) {}
+  private timeout = 15000;
 
-  GetUsers = ( sNameUser, callback ) => {
-    // 'https://api.github.com/search/users?q=' + sNameUser + '+in:fullname'
-    this.http.get( 'https://api.github.com/search/users?q=' + sNameUser ).subscribe( resp => {
-      callback( resp );
-    }, err => {
-      callback(err.error.msg);
-    });
+  constructor(
+    private http: HttpClient
+  ) {}
+
+  public fetchAllUsers = ( name: string ): Observable<User[]> => {
+    return this.http.get(`https://api.github.com/search/users?q=${name}`)
+    .pipe(
+      timeout(this.timeout),
+      catchError( ( error ) => {
+        switch ( error.status ) {
+          case 404:
+            return throwError( 'Nenhum usuário encontrado, verifique se digitou o nome corretamente!' );
+          default:
+            return throwError( `Encontramos uma falha ao obter lista de usuários!
+              Por favor tente novamente, se persistir contate o nosso suporte` );
+        }
+      }),
+      map( ( users: any ) => {
+
+        const firstResults = users.items.slice(0, 8);
+        if ( !firstResults ) {
+          return [];
+        }
+
+        return firstResults.map( ( user: any ) => {
+          return User.build(user);
+        });
+      }),
+    );
   }
 
-  GetUserInfo = ( sUrlUser, callback )  => {
-    this.http.get( sUrlUser ).subscribe( resp => {
-      callback( resp );
-    }, err => {
-      callback(err.error.msg);
-    });
+  public fetchUser = ( url: string ): Observable<User>  => {
+    return this.http.get( url ).pipe(
+      timeout(this.timeout),
+      catchError( error => {
+        switch ( error.status ) {
+          case 404:
+            return throwError('Usuário não encontrado!');
+          default:
+            return throwError(`Encontramos uma falha ao obter detalhes do usuário!
+              Por favor tente novamente mais tarde, se persistir entre em contato com nossa equipe de suporte.`);
+        }
+      }),
+      map( ( user ) => {
+        return User.build(user);
+      })
+    );
   }
 }

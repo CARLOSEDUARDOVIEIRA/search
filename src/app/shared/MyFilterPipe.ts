@@ -5,16 +5,16 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class MyFilterPipe implements PipeTransform {
   transform(items: any, filter: any, defaultFilter: boolean): any {
-    if (!filter){
+    if ( !filter ) {
       return items;
     }
 
-    if (!Array.isArray(items)){
+    if ( !Array.isArray(items) ) {
       return items;
     }
 
     if (filter && Array.isArray(items)) {
-      let filterKeys = Object.keys(filter);
+      const filterKeys = Object.keys(filter);
 
       if (defaultFilter) {
         return items.filter(item =>

@@ -1,0 +1,15 @@
+<div class="row" *ngIf="userList.length">
+  <div class='cursor-pointer'
+    *ngFor="let user of userList | grdFilter: {username: searchText.value};"
+    (click)="getUserDetail(user)">
+
+    <div class="col s3">
+      <div class="col s4">
+        <img [src]="user.thumbUrl" alt="avatar usuário" class="avatar">
+      </div>
+      <div class="col s8">
+        <p class="resultText">{{user.username}}</p>
+      </div>
+    </div>
+  </div>
+</div>

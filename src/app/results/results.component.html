@@ -1,51 +1,34 @@
 <div class="row" id='search'>
-  <div class="input-field col s12">
-    <input #searchText type="text" autocomplete='off' (keyup)="eventHandler($event)" autofocus placeholder="username-github-sem-espacos">
+  <div class="col s8 offset-s2">
+    <input
+      #searchText
+      type="text"
+      autocomplete='off'
+      (keyup)="eventHandler($event)"
+      autofocus
+      placeholder="username-github-sem-espacos">
   </div>
 </div>
-<div class='row' *ngIf="showWarningNoFound">
-  <div class="alert-no-found col-md-12">
+
+<app-user-list
+  *ngIf="userList.length && !user.name"
+  [userList]="userList"
+  [searchText]="searchText"
+  (callUser)="getUserDetail($event)">
+</app-user-list>
+
+<div class='row' *ngIf="searchText.value && !userList.length && !isLoading">
+  <div class="alert-no-found col s8 offset-s2">
     <strong>Oops!</strong> Nenhum registro encontrado com este nome
   </div>
 </div>
-<div class="row" id="results" *ngIf="!showUserInfo">
-  <div id='line' *ngFor="let user of aResultUsers | grdFilter: {login: searchText.value}; let i=index;" (click)="ListUserInformation(user)">
-    <div class="col s3" *ngIf="i<8">
-      <div class="input-field col s4">
-        <img src="{{user.avatar_url}}" alt="avatar" class="avatar">
-      </div>
-      <div class="input-field col s8">
-        <p class="resultText">{{user.login}}</p>
-      </div>
-    </div>
-  </div>
-</div>
+
+<app-user-detail
+  *ngIf="user && user.name"
+  [user]="user"
+  (toUserList)="removeUser()">
+</app-user-detail>
 
 <ngx-spinner bdColor="rgba(51,51,51,0.8)" size="medium" color="#fff" type="ball-scale-multiple">
   <p style="font-size: 20px; color: white">Loading...</p>
 </ngx-spinner>
-
-<div class="row" id='userInfo' *ngIf="showUserInfo">
-  <div class="col s5">
-    <div class="card-image">
-      <img src="{{oUser['avatar_url']}}" class='img-info'>
-    </div>
-  </div>
-  <div class="col s6">
-    <div class="card">
-      <div class="card-content">
-        <div class='row col s12'>
-          <span class="card-title activator grey-text text-darken-4">{{oUser["name"]}}</span>
-        </div>
-        <p *ngIf="oUser['email']"> Email: {{oUser["email"]}} </p>
-        <p *ngIf="!oUser['email']"> Email: Private </p>
-        <p> Dt. Cadastro: {{oUser["created_at"] | date: 'dd/MM/yyyy HH:mm'}}</p>
-        <p> Seguidores: {{oUser["following"]}}</p>
-        <p> Seguindo: {{oUser["followers"]}}</p>
-        <div class="card-action">
-            <a href="{{oUser['html_url']}}" target="_blank">Visitar Perfil</a>
-          <button class="btn waves-effect waves-light" (click)="backSearch()"> Voltar </button>
-        </div>
-      </div>
-    </div>
-  </div>

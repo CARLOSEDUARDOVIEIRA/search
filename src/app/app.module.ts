@@ -1,26 +1,29 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { HeaderComponent } from './header/header.component';
 import { ResultsComponent } from './results/results.component';
 
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { MyFilterPipe } from './shared/MyFilterPipe';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { UserModule } from './user/user.module';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     ResultsComponent,
-    MyFilterPipe
-
   ],
   imports: [
     BrowserModule,
     HttpClientModule,
     NgxSpinnerModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    UserModule,
   ],
   providers: [],
   bootstrap: [HeaderComponent, ResultsComponent]
