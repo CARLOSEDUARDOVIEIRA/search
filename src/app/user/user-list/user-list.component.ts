@@ -11,7 +11,6 @@ import { User } from 'src/app/core/models/user.model';
 export class UserListComponent {
 
   @Input() userList:   User[] = [];
-  @Input() searchText: HTMLInputElement;
 
   @Output() callUser = new EventEmitter<User>();
 
