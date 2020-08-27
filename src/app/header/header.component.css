@@ -3,22 +3,30 @@
 }
 
 .logo img {
-  width: 200px;
   height: auto;
+  width: 200px;
 }
 
 .title__begin {
-  font-weight: lighter;
   font-family: 'Poiret One', cursive;
+  font-size: 3rem;
+  font-weight: lighter;
+  margin-top: 15px;
 }
 
 .title__end {
-  font-weight: bold;
   font-family: 'Paytone One', sans-serif;
+  font-weight: bold;
 }
 
 .subtitle {
   font-family: 'Poiret One', cursive;
   font-size: 2rem;
   font-weight: lighter;
+}
+
+@media only screen and ( min-width: 380px ) {
+  .title__begin {
+    font-size: 4.2rem;
+  }
 }
