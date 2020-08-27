@@ -22,7 +22,7 @@ export class UserService {
       timeout(this.timeout),
       pluck('items'),
       map( ( users: any ) => {
-        const firstResults = users.slice(0, 8);
+        const firstResults = users.slice(0, 9);
         if ( !firstResults ) {
           return [];
         }
