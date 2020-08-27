@@ -11,7 +11,7 @@
 </div>
 
 <app-user-list
-  *ngIf="userList.length && !user.name"
+  *ngIf="userList.length && !user.username"
   [userList]="userList"
   (callUser)="callUser($event)">
 </app-user-list>
@@ -23,7 +23,7 @@
 </div>
 
 <app-user-detail
-  *ngIf="user && user.name"
+  *ngIf="user && user.username"
   [user]="user"
   (toUserList)="removeUser()">
 </app-user-detail>
