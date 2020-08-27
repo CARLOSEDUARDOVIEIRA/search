@@ -9,7 +9,7 @@ import { User } from 'src/app/core/models/user.model';
 })
 export class UserDetailComponent {
 
-  @Input() user: User;
+  @Input() user = new User;
 
   @Output() toUserList = new EventEmitter<boolean>();
 
