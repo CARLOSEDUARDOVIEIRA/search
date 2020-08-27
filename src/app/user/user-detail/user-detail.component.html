@@ -18,6 +18,7 @@
         <p> Dt. Cadastro: {{ user.createdAt | date: 'dd/MM/yyyy HH:mm' }}</p>
         <p> Seguidores: {{ user.following }}</p>
         <p> Seguindo: {{ user.followers }}</p>
+        <p> Repositórios Públicos {{ user.repositories }} </p>
 
         <div class="card-action">
           <a (click)="toUserList.next(true)" class="cursor-pointer"> Voltar </a>

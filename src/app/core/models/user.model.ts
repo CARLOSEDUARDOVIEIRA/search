@@ -1,14 +1,15 @@
 export class User {
 
-  public name:        string;
-  public email:       string;
-  public createdAt:   string;
-  public profileLink: string;
-  public thumbUrl:    string;
-  public username:    string;
-  public url:         string;
-  public following:   number;
-  public followers:   number;
+  public name:          string;
+  public email:         string;
+  public createdAt:     string;
+  public profileLink:   string;
+  public thumbUrl:      string;
+  public username:      string;
+  public url:           string;
+  public following:     number;
+  public followers:     number;
+  public repositories:  number;
 
   public static build = ( data: any ) => {
     const {
@@ -19,7 +20,8 @@ export class User {
       avatar_url,
       login, url,
       following,
-      followers
+      followers,
+      public_repos,
     } = data;
 
     const user = new User();
@@ -33,6 +35,7 @@ export class User {
     user.url =          url;
     user.following =    following;
     user.followers =    followers;
+    user.repositories = public_repos;
     return user;
   }
 
