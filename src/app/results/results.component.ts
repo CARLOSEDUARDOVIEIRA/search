@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { debounceTime } from 'rxjs/operators';
-import { Subject, Subscription } from 'rxjs';
+import { debounceTime, map, distinctUntilChanged, switchMap, catchError, startWith } from 'rxjs/operators';
+import { Subject, Subscription, of } from 'rxjs';
 import { User } from '../core/models/user.model';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
@@ -16,6 +16,7 @@ export class ResultsComponent implements OnInit, OnDestroy {
 
   public userList:      User[] = [];
   public user:          User = new User();
+  public lastUser:      User = new User();
   public isLoading:     boolean;
 
   private filterString:   Subject<string> = new Subject<string>();
@@ -28,54 +29,85 @@ export class ResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.filterString.pipe(
-      debounceTime(300)
-      ).subscribe( searchingUser => {
-        if ( this.userList.length ) {
-          this.FindUserByName( { 'login' : searchingUser } );
-        } else {
-          this.getUsers( searchingUser );
-        }
-    });
+    this.watchTextInput();
   }
 
   ngOnDestroy() {
     this.subscriptions.unsubscribe();
   }
 
-  eventHandler(event: any) {
-    if ( event.code.indexOf('Key') === -1 ) {
-      return;
-    }
-    const value = event.target.value;
-
-    if ( value !== '' ) {
-      this.filterString.next(value);
-    }
-  }
-
-  FindUserByName = ( filter ) => {
-    this.spinner.show();
-    const filterKeys = ['login'];
-    const aOccurrence = this.userList.filter(item => {
-      return filterKeys.some((keyName) => {
-        return new RegExp(filter[keyName], 'gi').test(item[keyName]) || filter[keyName] === '';
-      });
-    });
-
-    if ( aOccurrence.length === 0 ) {
-      this.getUsers(filter.login);
-    } else {
-      this.spinner.hide();
-    }
-
+  public eventHandler = ( event: any ) => {
+    this.filterString.next(event.target.value);
   }
 
   public removeUser = () => {
+    this.lastUser = {...this.user};
     this.user = new User();
   }
 
-  public getUserDetail = ( userProfileLink: string ) => {
+  public callUser = ( user: User ) => {
+    if ( user.username === this.lastUser.username ) {
+      this.user = this.lastUser;
+      return;
+    }
+    this.getUserDetail(user.url);
+  }
+
+  private watchTextInput = () => {
+    this.filterString.pipe(
+      debounceTime(300),
+      map(e => e.trim()),
+      distinctUntilChanged(),
+      switchMap( term => {
+        if ( !term || term.length < 3 ) {
+          return of([]);
+        }
+
+        this.spinner.show();
+        this.isLoading = true;
+
+        const userMatch = this.findUserByName( term );
+        if ( userMatch.length ) {
+          return of(userMatch);
+        }
+
+        return this.userService.fetchAllUsers( term );
+      }),
+      catchError( (error, source) => {
+
+        this.spinner.hide();
+        this.isLoading = false;
+
+        switch ( error.status ) {
+          case 404:
+            this.toastrService.error('Nenhum usuário encontrado, verifique se digitou o nome corretamente!', 'U.ups!');
+            break;
+          default:
+            this.toastrService.error( `Encontramos uma falha ao obter lista de usuários!
+              Por favor tente novamente, se persistir contate o nosso suporte` );
+            break;
+        }
+
+        return source.pipe(
+          startWith([])
+        );
+      }),
+    ).subscribe((users) => {
+      this.spinner.hide();
+      this.isLoading = false;
+      this.userList = users;
+    });
+  }
+
+  private findUserByName = ( username: string ) => {
+    if ( !this.userList ) { return []; }
+
+    return this.userList.filter( user => {
+      return user.username === username;
+    });
+  }
+
+  private getUserDetail = ( userProfileLink: string ) => {
     this.spinner.show();
     this.isLoading = true;
     this.subscriptions.add(
@@ -89,23 +121,6 @@ export class ResultsComponent implements OnInit, OnDestroy {
         this.isLoading = false;
         this.toastrService.error(error, 'U.ups!');
       })
-    );
-  }
-
-  private getUsers = ( name: string ) => {
-    this.spinner.show();
-    this.isLoading = true;
-    this.subscriptions.add(
-      this.userService.fetchAllUsers( name )
-      .subscribe( ( users ) => {
-        this.spinner.hide();
-        this.isLoading = false;
-        this.userList = users;
-      }, error => {
-        this.spinner.hide();
-        this.isLoading = false;
-        this.toastrService.error(error, 'U.ups!');
-      }),
     );
   }
 }

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { User } from '../core/models/user.model';
-import { timeout, catchError, map } from 'rxjs/operators';
+import { timeout, catchError, map, pluck } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,22 +20,12 @@ export class UserService {
     return this.http.get(`https://api.github.com/search/users?q=${name}`)
     .pipe(
       timeout(this.timeout),
-      catchError( ( error ) => {
-        switch ( error.status ) {
-          case 404:
-            return throwError( 'Nenhum usuário encontrado, verifique se digitou o nome corretamente!' );
-          default:
-            return throwError( `Encontramos uma falha ao obter lista de usuários!
-              Por favor tente novamente, se persistir contate o nosso suporte` );
-        }
-      }),
+      pluck('items'),
       map( ( users: any ) => {
-
-        const firstResults = users.items.slice(0, 8);
+        const firstResults = users.slice(0, 8);
         if ( !firstResults ) {
           return [];
         }
-
         return firstResults.map( ( user: any ) => {
           return User.build(user);
         });

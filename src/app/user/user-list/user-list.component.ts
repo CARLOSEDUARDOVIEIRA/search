@@ -13,11 +13,11 @@ export class UserListComponent {
   @Input() userList:   User[] = [];
   @Input() searchText: HTMLInputElement;
 
-  @Output() callUser = new EventEmitter<string>();
+  @Output() callUser = new EventEmitter<User>();
 
   constructor() {}
 
   public getUserDetail = ( user: User ) => {
-    this.callUser.next( user.url );
+    this.callUser.next( user );
   }
 }

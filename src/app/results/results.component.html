@@ -14,7 +14,7 @@
   *ngIf="userList.length && !user.name"
   [userList]="userList"
   [searchText]="searchText"
-  (callUser)="getUserDetail($event)">
+  (callUser)="callUser($event)">
 </app-user-list>
 
 <div class='row' *ngIf="searchText.value && !userList.length && !isLoading">

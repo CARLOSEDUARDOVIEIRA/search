@@ -1,6 +1,6 @@
 <div class="row" *ngIf="userList.length">
   <div class='cursor-pointer'
-    *ngFor="let user of userList | grdFilter: {username: searchText.value};"
+    *ngFor="let user of userList"
     (click)="getUserDetail(user)">
 
     <div class="col s3">
