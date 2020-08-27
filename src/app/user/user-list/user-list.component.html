@@ -1,15 +1,21 @@
-<div class="row" *ngIf="userList.length">
-  <div class='cursor-pointer'
-    *ngFor="let user of userList"
-    (click)="getUserDetail(user)">
+<div class="row">
+  <div class="col s10 offset-s1">
+    <div class="users-card" *ngIf="userList.length">
+      <div class='cursor-pointer'
+        *ngFor="let user of userList"
+        (click)="getUserDetail(user)">
 
-    <div class="col s3">
-      <div class="col s4">
-        <img [src]="user.thumbUrl" alt="avatar usuário" class="avatar">
-      </div>
-      <div class="col s8">
-        <p class="resultText">{{user.username}}</p>
+        <div class="user-card">
+          <div class="user-card__image">
+            <img [src]="user.thumbUrl" alt="avatar usuário" class="avatar">
+          </div>
+          <div class="user-card__username">
+            <p class="resultText">{{user.username}}</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </div>
+

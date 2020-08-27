@@ -4,3 +4,32 @@
   height: auto;
   width:100%;
 }
+
+.users-card {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.user-card {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 15px;
+  width: 20vw;
+  min-width: 200px;
+}
+
+.user-card__image {
+  width: 20%;
+}
+
+.user-card__image img {
+  position: relative;
+  transform: translate(0, 50%);
+}
+
+.user-card__username {
+  overflow: hidden;
+  padding: 10px;
+  text-overflow: ellipsis;
+  width: 80%;
+}
