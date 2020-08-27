@@ -11,11 +11,18 @@
 }
 
 .user-card {
+  background-color: #fff;
   display: flex;
   flex-direction: row;
   margin: 10px 15px;
-  width: 20vw;
   min-width: 200px;
+  transition: 0.3s;
+  width: 20vw;
+  padding: 0 5%;
+}
+
+.user-card:hover {
+  background-color: #ccc;
 }
 
 .user-card__image {
@@ -24,12 +31,13 @@
 
 .user-card__image img {
   position: relative;
-  transform: translate(0, 50%);
+  top: 50%;
+  transform: translate(0, -50%);
 }
 
 .user-card__username {
   overflow: hidden;
   padding: 10px;
   text-overflow: ellipsis;
-  width: 80%;
+  width: 70%;
 }
