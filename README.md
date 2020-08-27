@@ -1,27 +1,51 @@
-# Search
+<h1 align = "center">
+ <img src = "src/assets/logo.png" width="150px"><br>
+</h1>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.8.
+# BUSCAHUB
+Este projeto utiliza chamadas a API github para buscar usuários com base no termo digitado na caixa de pesquisa. Tudo isso feito utilizando a tecnica de autocomplete.
 
-## Development server
+<h1 align = "center">
+ <img src = "src/assets/screen1.png"><br>
+</h1>
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+# Tecnologias
+- TypeScript
+- Angular
+- Jasmine
+- Rxjs
+- Materialize
 
-## Code scaffolding
+# Screenshots
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Web/Lista
+<h1 align = "center">
+ <img src = "src/assets/buscahub.gif"><br>
+</h1>
 
-## Build
+## Web/Detalhes
+<h1 align = "center">
+ <img src = "src/assets/screen2.png"><br>
+</h1>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+## App/Home
+<h1 align = "center">
+ <img src = "src/assets/screen3.png" width="250px">
+ <img src = "src/assets/screen3.png" width="250px"><br>
+</h1>
 
-## Running unit tests
+# Pontos interessantes
+Este projeto foi criado em outubro de 2018, na ocasião eu já tinha conhecimento de angular mas trabalhava com a versão 1+, e utilizava a versão atual em pequenos projetos como forma de estudo. Praticamente 2 anos depois, eu resolvi aplicar os conhecimentos que obtive ao longo deste tempo como a criação de testes unitários, a melhor utilização da biblioteca rxjs e maior compreensão de estilização do html e responsividade.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Testes unitários
+Este projeto contém testes unitários, é importante resaltar que a versão do projeto é antiga e eu não quis atualizar porque o objetivo era refatorar apenas o código e implementar novos pontos de vista para o projeto, por isso alguns testes estão desatualizados de acordo com a versão atual do [jasmine](https://jasmine.github.io/).
+ - Em breve vou escrever pequenos artigos explicando as ideias por trás dos testes aqui criados.
 
-## Running end-to-end tests
+## RXJS
+Excelente biblioteca utilizada nativamente pelo angular, que nos permite trabalhar de forma assincrona com muita facilidade. Este projeto utiliza os métodos implementados pelo [rxjs](https://www.learnrxjs.io/) mais utilizados e alguns não tanto assim.
+- Em breve vou escrever um pequeno artigo explicando as ideias por trás da utilização de cada um.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## Materialize, Grid, Flex
+Este projeto utiliza para estilização a biblioteca do [materialize](https://materializecss.com/). É possível notar alguns detalhes referentes ao esquema de grid, algumas estilizações próprias do materialize como por exemplo a utilizada no input e no card. Também utilizei  [flexbox](https://developer.mozilla.org/pt-BR/docs/Web/CSS/CSS_Flexible_Box_Layout/Conceitos_Basicos_do_Flexbox) para exibir a lista com os cards dos usuários na tela.
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+- Em breve vou escrever um pequeno artigo abordando este tema.
