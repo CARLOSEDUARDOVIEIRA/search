@@ -1,10 +1,62 @@
+.btn-back {
+  margin-top: 10px;
+  order: 2; /* Go down, bring Box B up */
+}
+
+.btn-back > a {
+  margin-right: unset !important;
+}
+
+.card {
+  margin: auto;
+  margin-bottom: 10px;
+  min-width: 200px;
+}
+
+.card-action {
+  text-align: center;
+}
+
+.card-image {
+  min-width: 200px;
+}
+
 .img-info {
   align-content: center;
   height: 100%;
   width:100%;
 }
 
+.flex-s {
+  display: flex;
+  flex-direction: column; /* Stack on top */
+}
+
 .userInfo {
-  margin-left: 20%;
-  margin-right: 20%;
+  margin: 0 20px;
+}
+
+@media only screen and ( min-width: 380px ) {
+  .userInfo {
+    margin-left: 20%;
+    margin-right: 20%;
+  }
+}
+
+@media only screen and ( min-width: 992px ) {
+  .btn-back {
+    margin-top: unset;
+    order: unset;
+  }
+
+  .btn-back > a {
+    /* margin-right: 24px; */
+    position: relative;
+    top:50%;
+    transform: translate(0, -50%);
+  }
+
+  .flex-s {
+    display: block;
+  }
 }

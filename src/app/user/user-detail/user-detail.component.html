@@ -1,11 +1,11 @@
 <div class="row userInfo">
-  <div class="col s5">
+  <div class="col l5 s12">
     <div class="card-image">
       <img [src]="user.thumbUrl" class='img-info'>
     </div>
   </div>
 
-  <div class="col s6">
+  <div class="col l6 s12">
     <div class="card">
       <div class="card-content">
         <div class='row'>
@@ -20,9 +20,13 @@
         <p> Seguindo: {{ user.followers }}</p>
         <p> Repositórios Públicos {{ user.repositories }} </p>
 
-        <div class="card-action">
-          <a (click)="toUserList.next(true)" class="cursor-pointer backBtn"> Voltar </a>
-          <button class="btn waves-effect waves-light" (click)="toUserProfile()"> Visitar Perfil </button>
+        <div class="card-action row flex-s">
+          <div class="col l6 s12 btn-back">
+            <a (click)="toUserList.next(true)" class="cursor-pointer backBtn"> Voltar </a>
+          </div>
+          <div class="col l6 s12">
+            <button class="btn waves-effect waves-light" (click)="toUserProfile()"> Visitar Perfil </button>
+          </div>
         </div>
 
       </div>
