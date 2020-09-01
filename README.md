@@ -39,7 +39,8 @@ Este projeto foi criado em outubro de 2018, na ocasião eu já tinha conheciment
 
 ## Testes unitários
 Este projeto contém testes unitários, é importante resaltar que a versão do projeto é antiga e eu não quis atualizar porque o objetivo era refatorar apenas o código e implementar novos pontos de vista para o projeto, por isso alguns testes estão desatualizados de acordo com a versão atual do [jasmine](https://jasmine.github.io/).
- - Em breve vou escrever pequenos artigos explicando as ideias por trás dos testes aqui criados.
+- [Testes unitários - validação html](https://medium.com/carlos-eduardo-vieira/testes-unit%C3%A1rios-em-aplica%C3%A7%C3%A3o-angular-usando-jasmine-d8161254f69c)
+- [Testes unitários - validação métodos de componente](https://medium.com/carlos-eduardo-vieira/testes-unit%C3%A1rios-valida%C3%A7%C3%A3o-dos-m%C3%A9todos-do-componente-usando-jasmine-88e5916e3039)
 
 ## RXJS
 Excelente biblioteca utilizada nativamente pelo angular, que nos permite trabalhar de forma assincrona com muita facilidade. Este projeto utiliza os métodos implementados pelo [rxjs](https://www.learnrxjs.io/) mais utilizados e alguns não tanto assim.
