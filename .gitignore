@@ -9,7 +9,7 @@
 /node_modules
 
 # IDEs and editors
-./package-lock.json
+package-lock.json
 /.idea
 .project
 .classpath
