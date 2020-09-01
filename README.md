@@ -28,10 +28,10 @@ Este projeto utiliza chamadas a API github para buscar usuários com base no ter
  <img src = "src/assets/screen2.png"><br>
 </h1>
 
-## App/Home
+## App
 <h1 align = "center">
  <img src = "src/assets/screen3.png" width="250px">
- <img src = "src/assets/screen3.png" width="250px"><br>
+ <img src = "src/assets/screen4.png" width="250px"><br>
 </h1>
 
 # Pontos interessantes
