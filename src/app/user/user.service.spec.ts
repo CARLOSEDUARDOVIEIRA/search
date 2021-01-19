@@ -1,52 +1,84 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { TestBed } from '@angular/core/testing';
+import { environment } from "./../../environments/environment";
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
 
-import { UserService } from './user.service';
-import { UserMock, UnformattedUser } from './../core/mocks/users.mock';
+import { UserService } from "./user.service";
+import { UserMock, UnformattedUser } from "./../core/mocks/users.mock";
 
-describe('UserService', () => {
-
+describe("UserService", () => {
   let service: UserService;
   let httpMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-      ],
-      providers: [
-        UserService,
-      ]
+      imports: [HttpClientTestingModule],
+      providers: [UserService],
     });
 
     service = TestBed.get(UserService);
     httpMock = TestBed.get(HttpTestingController);
   });
 
-  it('Deve criar', () => {
+  it("Deve criar", () => {
     expect(service).toBeTruthy();
     expect(httpMock).toBeTruthy();
   });
 
-  it('fetchAllUsers Deve chamar a API github passando um termo de filtro e receber a lista de usuários como resposta', () => {
+  describe("#fetchAllUsers", () => {
     const name = UserMock.username;
-    service.fetchAllUsers(name).subscribe( ( users ) => {
-      expect(users).toEqual([UserMock]);
-    });
+    const endpoint = `${environment.backendUrl}/users?q=${name}`;
 
-    const req = httpMock.expectOne(`https://api.github.com/search/users?q=${name}`);
-    expect(req.request.method).toBe('GET');
-    req.flush({ items: [UnformattedUser] });
+    it("Deve chamar a API github passando o endpoint e parâmetros corretos e receber a lista de usuários como resposta", () => {
+      service.fetchAllUsers(name).subscribe((users) => {
+        expect(users).toEqual([UserMock]);
+      });
+
+      const req = httpMock.expectOne(endpoint);
+      expect(req.request.method).toBe("GET");
+      req.flush({ items: [UnformattedUser] });
+    });
   });
 
-  it('fetchUser Deve chamar a API github passando a url do usuário selecionado e receber os detalhes deste como resposta', () => {
-    const url = UserMock.url;
-    service.fetchUser(url).subscribe( (userDetail) => {
-      expect(userDetail).toEqual(UserMock);
+  describe("#fetchUser", () => {
+    const endpoint = UserMock.url;
+    it("Deve chamar a API github passando o endpoint e parametros corretos e receber os detalhes do usuário como resposta", () => {
+      service.fetchUser(endpoint).subscribe((userDetail) => {
+        expect(userDetail).toEqual(UserMock);
+      });
+
+      const req = httpMock.expectOne(endpoint);
+      expect(req.request.method).toBe("GET");
+      req.flush(UnformattedUser);
     });
 
-    const req = httpMock.expectOne(url);
-    expect(req.request.method).toBe('GET');
-    req.flush(UnformattedUser);
+    it("Deve tratar mensagem de erro 500 quando este retornado pelo servidor", () => {
+      service.fetchUser(endpoint).subscribe(
+        () => fail("Deveria ter logado erro"),
+        (error) => {
+          expect(error).toContain(
+            `Encontramos uma falha ao obter detalhes do usuário!
+              Por favor tente novamente mais tarde, se persistir entre em contato com nossa equipe de suporte.`
+          );
+        }
+      );
+
+      const req = httpMock.expectOne(endpoint);
+      req.error(new ErrorEvent("Error"), { status: 500 });
+    });
+
+    it("Deve tratar mensagem de erro 404 quando este retornado pelo servidor", () => {
+      service.fetchUser(endpoint).subscribe(
+        () => fail("Deveria ter logado erro"),
+        (error) => {
+          expect(error).toContain("Usuário não encontrado!");
+        }
+      );
+
+      const req = httpMock.expectOne(endpoint);
+      req.error(new ErrorEvent("Error"), { status: 404 });
+    });
   });
 });
